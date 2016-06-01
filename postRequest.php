@@ -36,9 +36,9 @@
 * of The Government containing the law
 * @param FEK_checkBoxIssue is the checkbox reffering to the issue
 */
-public function postRequest($FEK_year, $FEK_issue, $FEK_number, $checkBoxIssue) {
+function postRequest($FEK_year, $FEK_issue, $FEK_number, $checkBoxIssue) {
 	// the url of the "Ethniko Tupografeio", where the form for the law search should be completed
-	$url = 'http://wwww.et.gr/idocs-nph/search/fekForm.html';
+	$url = 'http://www.et.gr/idocs-nph/search/fekForm.html';
 	// the year that the law was published
 	$year = (int)$FEK_year;
 	// the array with each reference on a law and the link which points to this law

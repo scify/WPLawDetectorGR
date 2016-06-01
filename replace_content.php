@@ -33,7 +33,7 @@ require_once('RegexFEK.php');
 * @param more_link_text
 * @param strip_teaser
 */
-public function replace_content($more_link_text, $strip_teaser){
+function replace_content($more_link_text, $strip_teaser){
 	$content = get_the_content( $more_link_text, $strip_teaser );
 	$resultsArray = RegexFEK($content);
 	foreach ($resultsArray as $v1) {
