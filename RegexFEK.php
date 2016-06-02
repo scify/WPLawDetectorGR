@@ -84,42 +84,48 @@ function regexFEK($content){
 						* and there are  get from this string the FEK issue (e.g. A) and FEK number
 						*/
 						$FEK_year = trim(substr($fekParts[1], 0, strrpos($fekParts[1], '(')));
-						if (strpos($fekParts[1], "΄") !== false){
-							$Fek_issue = str_replace("(", "", trim(substr($fekParts[1], strrpos($fekParts[1], '('), strrpos($fekParts[1], '΄') - strrpos($fekParts[1], '('))));
-							$Fek_number = str_replace("΄", "", trim(substr($fekParts[1], strrpos($fekParts[1], '΄'), strrpos($fekParts[1], ')') - strrpos($fekParts[1], '΄'))));
-
-						} elseif (strpos($fekParts[1], "'") !== false) {
-							$Fek_issue = str_replace("(", "", trim(substr($fekParts[1], strrpos($fekParts[1], '('), strrpos($fekParts[1], "'") - strrpos($fekParts[1], '('))));
-							$Fek_number = str_replace("'", "", trim(substr($fekParts[1], strrpos($fekParts[1], "'"), strrpos($fekParts[1], ')') - strrpos($fekParts[1], "'"))));
-
-						} elseif (strpos($fekParts[1], "’") !== false) {
-							$Fek_issue = str_replace("(", "", trim(substr($fekParts[1], strrpos($fekParts[1], '('), strrpos($fekParts[1], "’") - strrpos($fekParts[1], '('))));
-							$Fek_number = str_replace("’", "", trim(substr($fekParts[1], strrpos($fekParts[1], "’"), strrpos($fekParts[1], ')') - strrpos($fekParts[1], "’"))));
-
-						} elseif (strpos($fekParts[1], "`") !== false) {
-							$Fek_issue = str_replace("(", "", trim(substr($fekParts[1], strrpos($fekParts[1], '('), strrpos($fekParts[1], "`") - strrpos($fekParts[1], '('))));
-							$Fek_number = str_replace("`", "", trim(substr($fekParts[1], strrpos($fekParts[1], "`"), strrpos($fekParts[1], ')') - strrpos($fekParts[1], "`"))));
-
-						}else {
-							/**
-							* If none of thes characters was found then check if a space
-							* exists or else get the first character
-							* as the FEK issue (e.g. A, B etc)
-							*/
-
-							$Fek_issue = str_replace(")", "", (str_replace("(", "", trim(substr($fekParts[1], strrpos($fekParts[1], '('), strrpos($fekParts[1], ")") - strrpos($fekParts[1], '('))))));
-							if (startsWith($Fek_issue, "ΦΕΚ")){
-								$Fek_issue = trim(substr($FEK_issue, strpos("ΦΕΚ") + 3));
+						switch(true){
+							case(strpos($fekParts[1], "΄") !== false): {
+								$Fek_issue = str_replace("(", "", trim(substr($fekParts[1], strrpos($fekParts[1], '('), strrpos($fekParts[1], '΄') - strrpos($fekParts[1], '('))));
+								$Fek_number = str_replace("΄", "", trim(substr($fekParts[1], strrpos($fekParts[1], '΄'), strrpos($fekParts[1], ')') - strrpos($fekParts[1], '΄'))));
+								break;
+							}	
+							case(strpos($fekParts[1], "'") !== false): {
+								$Fek_issue = str_replace("(", "", trim(substr($fekParts[1], strrpos($fekParts[1], '('), strrpos($fekParts[1], "'") - strrpos($fekParts[1], '('))));
+								$Fek_number = str_replace("'", "", trim(substr($fekParts[1], strrpos($fekParts[1], "'"), strrpos($fekParts[1], ')') - strrpos($fekParts[1], "'"))));
+								break;
 							}
+							case(strpos($fekParts[1], "’") !== false): {
+								$Fek_issue = str_replace("(", "", trim(substr($fekParts[1], strrpos($fekParts[1], '('), strrpos($fekParts[1], "’") - strrpos($fekParts[1], '('))));
+								$Fek_number = str_replace("’", "", trim(substr($fekParts[1], strrpos($fekParts[1], "’"), strrpos($fekParts[1], ')') - strrpos($fekParts[1], "’"))));
+								break;
+							}	
+							case(strpos($fekParts[1], "`") !== false): {
+								$Fek_issue = str_replace("(", "", trim(substr($fekParts[1], strrpos($fekParts[1], '('), strrpos($fekParts[1], "`") - strrpos($fekParts[1], '('))));
+								$Fek_number = str_replace("`", "", trim(substr($fekParts[1], strrpos($fekParts[1], "`"), strrpos($fekParts[1], ')') - strrpos($fekParts[1], "`"))));
+								break;
+							}
+							default: {
+								/**
+								* If none of thes characters was found then check if a space
+								* exists or else get the first character
+								* as the FEK issue (e.g. A, B etc)
+								*/
 
-							if(strpos(Fek_issue, " ") !== false) {
-								$splittedIssue = explode(" ", $Fek_issue);
-								$Fek_issue = $splittedIssue[0];
-								$Fek_number = $splittedIssue[1];
+								$Fek_issue = str_replace(")", "", (str_replace("(", "", trim(substr($fekParts[1], strrpos($fekParts[1], '('), strrpos($fekParts[1], ")") - strrpos($fekParts[1], '('))))));
+								if (startsWith($Fek_issue, "ΦΕΚ")){
+									$Fek_issue = trim(substr($FEK_issue, strpos("ΦΕΚ") + 3));
+								}
 
-							} else {
-								$Fek_number = substr($FEK_issue, 1);
-								$Fek_issue = substr($FEK_issue, 0, 1);
+								if(strpos(Fek_issue, " ") !== false) {
+									$splittedIssue = explode(" ", $Fek_issue);
+									$Fek_issue = $splittedIssue[0];
+									$Fek_number = $splittedIssue[1];
+
+								} else {
+									$Fek_number = substr($FEK_issue, 1);
+									$Fek_issue = substr($FEK_issue, 0, 1);
+								}
 							}
 						}
 						// split the Fek_number in tokens
