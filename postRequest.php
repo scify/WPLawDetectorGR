@@ -27,14 +27,14 @@
 /**
 * This is the function which returns
 * the link pointing to the law found
-* in the content of the Wordpress page.
+* in the content of the WordPress page.
 * @param FEK_year is the year when the Newspaper of
-* The Government containing the law was published
+* the Government containing the law was published
 * @param FEK_issue is the issue of the Newspaper of
-* The Government containing the law
+* the Government containing the law
 * @param FEK_number is the number of the issue of the Newspaper
 * of The Government containing the law
-* @param FEK_checkBoxIssue is the checkbox reffering to the issue
+* @param FEK_checkBoxIssue is the checkbox referring to the issue
 */
 function postRequest($FEK_year, $FEK_issue, $FEK_number, $checkBoxIssue) {
 	// the url of the "Ethniko Tupografeio", where the form for the law search should be completed
@@ -86,7 +86,6 @@ function postRequest($FEK_year, $FEK_issue, $FEK_number, $checkBoxIssue) {
 	* of the search form
 	*/
 	$result = file_get_contents($url, false, $context);
-
 	/**
 	* if a result is found, then return
 	* the url pointing to the required law
