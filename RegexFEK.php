@@ -1,22 +1,31 @@
 <?php 
 
-require_once('postRequest.php');
+/**
+ * Copyright 2016 , SciFY NPO - http://www.scify.org
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 /**
-* Copyright 2016, SciFY NPO - http://www.scify.org
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*    http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * @link       http://thewildpointers.com/
+ * @since      1.0.0
+ * @package    WPLawDetectorGR
+ * @author     WildPointers <2wildpointers@gmail.com>
+ */
+
+
+require_once('postRequest.php');
+
 
 /**
 * This is the function which checks the content
@@ -25,7 +34,7 @@ require_once('postRequest.php');
 * @param content is the content of the
 * Wordpress webpage
 */
-public function regexFEK($content){
+function regexFEK($content){
 	/**
 	* the pattern that should be looked for in order to identify
 	* a reference to the Newspaper of the Government
@@ -75,42 +84,48 @@ public function regexFEK($content){
 						* and there are  get from this string the FEK issue (e.g. A) and FEK number
 						*/
 						$FEK_year = trim(substr($fekParts[1], 0, strrpos($fekParts[1], '(')));
-						if (strpos($fekParts[1], "΄") !== false){
-							$Fek_issue = str_replace("(", "", trim(substr($fekParts[1], strrpos($fekParts[1], '('), strrpos($fekParts[1], '΄') - strrpos($fekParts[1], '('))));
-							$Fek_number = str_replace("΄", "", trim(substr($fekParts[1], strrpos($fekParts[1], '΄'), strrpos($fekParts[1], ')') - strrpos($fekParts[1], '΄'))));
-
-						} elseif (strpos($fekParts[1], "'") !== false) {
-							$Fek_issue = str_replace("(", "", trim(substr($fekParts[1], strrpos($fekParts[1], '('), strrpos($fekParts[1], "'") - strrpos($fekParts[1], '('))));
-							$Fek_number = str_replace("'", "", trim(substr($fekParts[1], strrpos($fekParts[1], "'"), strrpos($fekParts[1], ')') - strrpos($fekParts[1], "'"))));
-
-						} elseif (strpos($fekParts[1], "’") !== false) {
-							$Fek_issue = str_replace("(", "", trim(substr($fekParts[1], strrpos($fekParts[1], '('), strrpos($fekParts[1], "’") - strrpos($fekParts[1], '('))));
-							$Fek_number = str_replace("’", "", trim(substr($fekParts[1], strrpos($fekParts[1], "’"), strrpos($fekParts[1], ')') - strrpos($fekParts[1], "’"))));
-
-						} elseif (strpos($fekParts[1], "`") !== false) {
-							$Fek_issue = str_replace("(", "", trim(substr($fekParts[1], strrpos($fekParts[1], '('), strrpos($fekParts[1], "`") - strrpos($fekParts[1], '('))));
-							$Fek_number = str_replace("`", "", trim(substr($fekParts[1], strrpos($fekParts[1], "`"), strrpos($fekParts[1], ')') - strrpos($fekParts[1], "`"))));
-
-						}else {
-							/**
-							* If none of thes characters was found then check if a space
-							* exists or else get the first character
-							* as the FEK issue (e.g. A, B etc)
-							*/
-
-							$Fek_issue = str_replace(")", "", (str_replace("(", "", trim(substr($fekParts[1], strrpos($fekParts[1], '('), strrpos($fekParts[1], ")") - strrpos($fekParts[1], '('))))));
-							if (startsWith($Fek_issue, "ΦΕΚ")){
-								$Fek_issue = trim(substr($FEK_issue, strpos("ΦΕΚ") + 3));
+						switch(true){
+							case(strpos($fekParts[1], "΄") !== false): {
+								$Fek_issue = str_replace("(", "", trim(substr($fekParts[1], strrpos($fekParts[1], '('), strrpos($fekParts[1], '΄') - strrpos($fekParts[1], '('))));
+								$Fek_number = str_replace("΄", "", trim(substr($fekParts[1], strrpos($fekParts[1], '΄'), strrpos($fekParts[1], ')') - strrpos($fekParts[1], '΄'))));
+								break;
+							}	
+							case(strpos($fekParts[1], "'") !== false): {
+								$Fek_issue = str_replace("(", "", trim(substr($fekParts[1], strrpos($fekParts[1], '('), strrpos($fekParts[1], "'") - strrpos($fekParts[1], '('))));
+								$Fek_number = str_replace("'", "", trim(substr($fekParts[1], strrpos($fekParts[1], "'"), strrpos($fekParts[1], ')') - strrpos($fekParts[1], "'"))));
+								break;
 							}
+							case(strpos($fekParts[1], "’") !== false): {
+								$Fek_issue = str_replace("(", "", trim(substr($fekParts[1], strrpos($fekParts[1], '('), strrpos($fekParts[1], "’") - strrpos($fekParts[1], '('))));
+								$Fek_number = str_replace("’", "", trim(substr($fekParts[1], strrpos($fekParts[1], "’"), strrpos($fekParts[1], ')') - strrpos($fekParts[1], "’"))));
+								break;
+							}	
+							case(strpos($fekParts[1], "`") !== false): {
+								$Fek_issue = str_replace("(", "", trim(substr($fekParts[1], strrpos($fekParts[1], '('), strrpos($fekParts[1], "`") - strrpos($fekParts[1], '('))));
+								$Fek_number = str_replace("`", "", trim(substr($fekParts[1], strrpos($fekParts[1], "`"), strrpos($fekParts[1], ')') - strrpos($fekParts[1], "`"))));
+								break;
+							}
+							default: {
+								/**
+								* If none of thes characters was found then check if a space
+								* exists or else get the first character
+								* as the FEK issue (e.g. A, B etc)
+								*/
 
-							if(strpos(Fek_issue, " ") !== false) {
-								$splittedIssue = explode(" ", $Fek_issue);
-								$Fek_issue = $splittedIssue[0];
-								$Fek_number = $splittedIssue[1];
+								$Fek_issue = str_replace(")", "", (str_replace("(", "", trim(substr($fekParts[1], strrpos($fekParts[1], '('), strrpos($fekParts[1], ")") - strrpos($fekParts[1], '('))))));
+								if (startsWith($Fek_issue, "ΦΕΚ")){
+									$Fek_issue = trim(substr($FEK_issue, strpos("ΦΕΚ") + 3));
+								}
 
-							} else {
-								$Fek_number = substr($FEK_issue, 1);
-								$Fek_issue = substr($FEK_issue, 0, 1);
+								if(strpos(Fek_issue, " ") !== false) {
+									$splittedIssue = explode(" ", $Fek_issue);
+									$Fek_issue = $splittedIssue[0];
+									$Fek_number = $splittedIssue[1];
+
+								} else {
+									$Fek_number = substr($FEK_issue, 1);
+									$Fek_issue = substr($FEK_issue, 0, 1);
+								}
 							}
 						}
 						// split the Fek_number in tokens
